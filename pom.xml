@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.shouvonik</groupId>
+    <artifactId>java-interview-preparation</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Java Interview Preparation</name>
+    <description>UK Lead Developer interview prep — DSA, Java core, Spring Boot, MongoDB, Oracle, AWS</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>26</maven.compiler.release>
+        <junit.version>5.11.3</junit.version>
+        <surefire.version>3.5.2</surefire.version>
+        <compiler.version>3.13.0</compiler.version>
+        <exec.version>3.5.0</exec.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- JUnit 5 inherited by every submodule so tests can be written in any topic. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!--
+            `all` is active by default and includes every topic submodule.
+            As you add more areas (spring-boot, mongodb, oracle, aws, lead-prep, ...)
+            list them here too.
+
+            In IntelliJ's Maven panel (Profiles section) you can untick `all` and
+            tick a narrower profile to scope work — e.g. `dsa-only`, `backend-only`.
+
+            CLI:
+              mvn install                   # builds every submodule (all profile)
+              mvn -pl dsa compile           # builds just the dsa module
+              mvn -pl dsa exec:java -Dexec.mainClass=dsa.arrays.ArraysGuide
+        -->
+        <profile>
+            <id>all</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>dsa</module>
+                <!-- Add more areas here as they land:
+                <module>spring-boot</module>
+                <module>mongodb</module>
+                <module>oracle</module>
+                <module>aws</module>
+                <module>lead-prep</module>
+                -->
+            </modules>
+        </profile>
+    </profiles>
+
+</project>
