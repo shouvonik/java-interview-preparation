@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <name>Java Interview Preparation</name>
-    <description>UK Lead Developer interview prep — DSA, Java core, Spring Boot, MongoDB, Oracle, AWS</description>
+    <description>Lead Developer interview prep — DSA, Java core, Spring Boot</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -85,6 +85,7 @@
             </activation>
             <modules>
                 <module>dsa</module>
+                <module>java-core</module>
                 <!-- Add more areas here as they land:
                 <module>spring-boot</module>
                 <module>mongodb</module>
