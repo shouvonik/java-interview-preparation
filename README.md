@@ -1,13 +1,13 @@
 # java-interview-preparation
 
-Personal study notes and worked examples for a UK Lead Developer / Tech Lead job search.
+Personal study notes and worked examples for a Lead Developer / Tech Lead job search.
 
 The repo is split by purpose so each area can be revised independently:
 
-| Folder | Purpose |
-| --- | --- |
+| Folder | Purpose                                                                                                                                           |
+| --- |---------------------------------------------------------------------------------------------------------------------------------------------------|
 | [`dsa/`](dsa/) | Data structures & algorithms for pair-programming and coding screens — every topic has notes, a worked guide, exercise stubs, and reference solutions. |
-| `lead-prep/` *(planned)* | Concept refresh for Java core, Spring Boot, MongoDB, Oracle, AWS, AWS AI — architecture and lead-level scenarios. |
+| `lead-prep/` *(planned)* | Concept refresh for Java core, Spring Boot — architecture and lead-level scenarios.                                                               |
 
 ## How to use
 

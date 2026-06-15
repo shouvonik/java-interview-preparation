@@ -10,8 +10,19 @@ public class ArraysGuide {
     // ---------------------------------------------------------------------
     // 1) Prefix sums
     // ---------------------------------------------------------------------
-    // prefix[i] = sum of nums[0..i-1]. Then sum(l, r) inclusive = prefix[r+1] - prefix[l].
-    // Useful when you answer many range-sum queries on a static array.
+    // Idea: precompute cumulative sums once, then answer any range-sum query
+    // in O(1) by subtracting two of them.
+    //
+    // prefix[i] = sum of nums[0..i-1]  (prefix[0] = 0 is the empty prefix).
+    // The extra leading 0 means prefix has length n+1, which removes the need
+    // for a special case when the range starts at index 0.
+    //
+    // Then sum(l, r) inclusive = prefix[r+1] - prefix[l].
+    //   Everything up to r, minus everything before l, leaves exactly l..r.
+    //
+    // Cost: O(n) one-time build, O(1) per query, O(n) extra space.
+    // Use it when the array is static (no updates) and you have MANY queries —
+    // if the array changes between queries, reach for a Fenwick/segment tree.
     static int[] buildPrefix(int[] nums) {
         int[] prefix = new int[nums.length + 1];
         for (int i = 0; i < nums.length; i++) {
@@ -27,8 +38,18 @@ public class ArraysGuide {
     // ---------------------------------------------------------------------
     // 2) Kadane's algorithm — max sum of a contiguous subarray.
     // ---------------------------------------------------------------------
-    // Invariant: `best` = max subarray ending at i.
-    // Either extend the previous best, or start fresh at nums[i].
+    // Idea: scan left to right keeping the best sum of a subarray that ENDS at
+    // the current index. At each step you face a single binary choice:
+    //   - extend the running subarray:  current + nums[i]
+    //   - or cut your losses and start fresh at nums[i].
+    // You start fresh exactly when the running sum has gone negative, because a
+    // negative prefix can only drag down whatever comes next.
+    //
+    // `current` = best sum ending at i;  `best` = best seen anywhere so far.
+    // We seed both with nums[0] so the answer is correct even when every number
+    // is negative (the answer is then the single largest element).
+    //
+    // Cost: O(n) time, O(1) space, single pass.
     static int maxSubarray(int[] nums) {
         int best = nums[0];
         int current = nums[0];
@@ -42,8 +63,17 @@ public class ArraysGuide {
     // ---------------------------------------------------------------------
     // 3) Product except self — without division, O(1) extra space.
     // ---------------------------------------------------------------------
-    // First pass: result[i] = product of everything LEFT of i.
-    // Second pass: multiply in product of everything RIGHT of i, on the fly.
+    // Goal: result[i] = product of every element EXCEPT nums[i].
+    // The naive answer is (product of all) / nums[i], but division is banned
+    // (and breaks on zeros). The trick: product-except-i is just
+    //   (product of everything to the LEFT of i) * (product to the RIGHT of i).
+    //
+    // First pass (left -> right): result[i] holds the left product.
+    // Second pass (right -> left): keep a running `right` product and fold it
+    // in as we go, so we never need a separate suffix array.
+    //
+    // We don't count the output array as extra space (it's the required result),
+    // so this is O(1) auxiliary space. Cost: O(n) time, two passes.
     static int[] productExceptSelf(int[] nums) {
         int n = nums.length;
         int[] result = new int[n];
@@ -62,9 +92,22 @@ public class ArraysGuide {
     // ---------------------------------------------------------------------
     // 4) In-place array rotation by k (right rotation).
     // ---------------------------------------------------------------------
-    // Trick: reverse whole array, reverse first k, reverse last n-k.
-    // [1,2,3,4,5,6,7], k=3 -> reverse all -> [7,6,5,4,3,2,1]
-    //   -> reverse first 3 -> [5,6,7,4,3,2,1] -> reverse last 4 -> [5,6,7,1,2,3,4].
+    // Goal: shift every element k places to the right, wrapping around, using
+    // no second array.
+    //
+    // First, k %= n: rotating by n lands back where you started, so only the
+    // remainder matters (and it guards against k > n).
+    //
+    // Trick: three reversals. Reversing the whole array puts the last k elements
+    // at the front but in the wrong order; reversing each of the two pieces
+    // (first k, last n-k) fixes their internal order.
+    //   [1,2,3,4,5,6,7], k=3
+    //     reverse all      -> [7,6,5,4,3,2,1]
+    //     reverse first 3  -> [5,6,7,4,3,2,1]
+    //     reverse last 4   -> [5,6,7,1,2,3,4]
+    //
+    // Cost: O(n) time, O(1) space — each element is touched a constant number
+    // of times.
     static void rotate(int[] nums, int k) {
         int n = nums.length;
         k %= n;
